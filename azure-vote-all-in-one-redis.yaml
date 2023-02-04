@@ -72,8 +72,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: azure-final-task
+    service.beta.kubernetes.io/azure-dns-label-name: final-task-aks
   name: azure-vote-front
 spec:
+  loadBalancerIP: 20.98.220.32 # update public ip address
   type: LoadBalancer
   ports:
   - port: 80
