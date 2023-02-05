@@ -53,11 +53,12 @@ spec:
       labels:
         app: azure-vote-front
     spec:
+      serviceAccountName: workload-identity-sa
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
       - name: azure-vote-front
-        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        image: cloudh2tacr.azurecr.io/azure-vote-front:v1
         ports:
         - containerPort: 80
         resources:
@@ -68,16 +69,27 @@ spec:
         env:
         - name: REDIS
           value: "azure-vote-back"
+        volumeMounts:
+          - name: secrets-store01-inline
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
+      volumes:
+        - name: secrets-store01-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "azure-kvname-workload-identity"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: azure-final-task
-    service.beta.kubernetes.io/azure-dns-label-name: final-task-aks
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: cloud-h2t-rg
+    service.beta.kubernetes.io/azure-dns-label-name: cloud-h2t-aks
   name: azure-vote-front
 spec:
-  loadBalancerIP: 20.98.220.32 # update public ip address
+  loadBalancerIP: 20.119.161.79 # update public ip address
   type: LoadBalancer
   ports:
   - port: 80
