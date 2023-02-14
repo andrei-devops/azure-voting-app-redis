@@ -89,7 +89,7 @@ metadata:
     service.beta.kubernetes.io/azure-dns-label-name: cloud-h2t-aks
   name: azure-vote-front
 spec:
-  loadBalancerIP: 20.119.161.79 # update public ip address
+  loadBalancerIP: 20.1.187.213 # update public ip address
   type: LoadBalancer
   ports:
   - port: 80
